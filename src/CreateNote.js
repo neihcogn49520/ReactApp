@@ -1,16 +1,18 @@
 import { React } from "react";
-function CreateNote() {
+function CreateNote({ textHandler, saveHandler, inputText}) {
     return (
         <div className="note" style={{background: "rgba(255, 255, 255, 0" }}>
             <textarea
                 cols="10"
                 rows="5"
+                value={inputText}
                 placeholder="Type..."
+                onChange={textHandler}
                 maxLength="100"
             ></textarea>
             <div className="note_footer">
                 <span className="label"> left</span>
-                <button className="note_save"> Save</button>
+                <button className="note_save" onClick={saveHandler}> Save</button>
             </div>  
         </div>
     );
