@@ -1,10 +1,10 @@
 import { React, useState, useEffect } from "react";
 import "../css/Note.css";
-import Note from "../../Note";
+import Note from "./Note";
 import { v4 as uuid } from "uuid";
-import { SettingsRemoteSharp } from "@mui/icons-material";
-import CreateNote from "../../CreateNote";
+import CreateNote from "./CreateNote";
 function Notes() {
+    
     //states
     const [notes, setNotes] = useState([]);
     const [inputText, setInputText] = useState("");
@@ -27,16 +27,37 @@ function Notes() {
         setInputText("");
     };
 
+    //delete note
     const deleteNote = (id) => {
         const filteredNotes = notes.filter((note) => note.id !== id);
         setNotes(filteredNotes);
     };
+    
+    
+    
+    //saving data to local storage
+    useEffect(() => {
+        localStorage.setItem('Notes', JSON.stringify(notes));
+    }, [notes]);
 
+    //get the saved notes and add to the array
+    useEffect(() => {
+        const data = JSON.parse(localStorage.getItem("Notes"));
+        if(data) {
+            setNotes(data);
+        }
+    }, []);
 
     return (
         <div className="notes">
-            <Note />
-            <Note />
+            {notes.map((note) => (
+                <Note
+                    key={note.id}
+                    id={note.id}
+                    text={note.text}
+                    deleteNote={deleteNote}
+                />
+            ))}
             <CreateNote 
                 textHandler={textHandler}
                 saveHandler={saveHandler}
@@ -44,5 +65,6 @@ function Notes() {
             />
         </div>
     );
+    
 }
 export default Notes;
